@@ -8,16 +8,7 @@ from multiprocessing import Pool
 import re
 import sys
 
-api_key = ['AIzaSyCIK5w6f4MrhgYzNPCVkMFrQxN_IQ_KO5w', 
-           'AIzaSyAF8jAPuv8oiJfJMKs_zFqUxGh11BT6OG4',
-           'AIzaSyBn3rmVMyn18jOc_K24BxXxewKBSMwZ7W0',
-           'AIzaSyCYZt6vYMXhTn3dykAtVi6KrkQ1b30rd0c',
-           'AIzaSyBLNAMh9TT6GGuRD1cxXM2X2YovlI-wyx8',
-           'AIzaSyDOMcbV8el6aAPay-I2t50n3MeB4YxV-nY',
-           'AIzaSyBvwz1-7wFsDKHAtPvE_ScQSf7Tbj_GXr4',
-           'AIzaSyC354FqnOpQUy69OFVhLd48FcxNXRFC0SQ',
-           'AIzaSyDx7H9lTj3pNVcxUXploZ9LdW_87_Ia4bs',
-           'AIzaSyA0xioeFHXFxWo4Z5yUDxI1hFMtfRU_KFU']
+api_key = ['AIzaSyBxSCWyRte5Ehjt9M_t1_ESGaHa81a9iTI']
 
 Custom_Search_Engine_ID = "005336700654283051786:1mzldt1husk"
 
@@ -41,11 +32,11 @@ def ggsearch(para):
     except:
         return []
 
-@timeout_decorator.timeout(7)
+@timeout_decorator.timeout(10)
 def getContent(url):
     try:
-        html = requests.get(url, timeout = 4)
-        tree = BeautifulSoup(html.text,'lxml')
+        html = requests.get(url).content
+        tree = BeautifulSoup(html, features='html.parser')
         for invisible_elem in tree.find_all(['script', 'style']):
             invisible_elem.extract()
 
@@ -57,25 +48,12 @@ def getContent(url):
         for href in tree.find_all(['a','strong']):
             href.unwrap()
 
-        tree = BeautifulSoup(str(tree.html),'lxml')
-
         text = tree.get_text(separator='\n\n')
         text = re.sub('\n +\n','\n\n',text)
 
         paragraphs += text.split('\n\n')
         paragraphs = [re.sub(' +',' ',p.strip()) for p in paragraphs]
         paragraphs = [p for p in paragraphs if len(p.split()) > 10]
-
-        for i in range(0,len(paragraphs)):
-            sents = []
-            text_chunks = list(chunks(paragraphs[i],100000))
-            for chunk in text_chunks:
-                sents += sent_tokenize(chunk)
-
-            sents = [s for s in sents if len(s) > 2]
-            sents = ' . '.join(sents)
-            paragraphs[i] = sents
-
         return '\n\n'.join(paragraphs)
     except:
         #print('Cannot read ' + url, str(sys.exc_info()[0]))
@@ -94,7 +72,7 @@ class GoogleSearch():
             GoogleSearch.__instance = self
             
     def search(self,question):
-        service = build("customsearch", "v1",developerKey=api_key[random.randint(0,10)])
+        service = build("customsearch", "v1",developerKey=api_key[0])
         pages_content = self.pool.map(ggsearch,[(i,service,question) for i in range(0,2)])
         pages_content = [j for i in pages_content for j in i]
 

@@ -1,1 +1,5 @@
-.idea
+.idea/
+__pycache__/
+.idea/workspace.xml
+a.py
+a.txt
