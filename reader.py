@@ -7,7 +7,7 @@ from utils import *
 from multiprocessing import Process, Pool
 
 class Args:
-    bert_model = './resources'
+    bert_model = 'resources'
     max_seq_length = 160
     doc_stride = 160
     predict_batch_size = 20
