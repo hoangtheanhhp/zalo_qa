@@ -2,7 +2,7 @@ from underthesea import pos_tag
 import string
 import functools
 
-stopwords = open('resources/stopwords_small.txt').read().split('\n')
+stopwords = open('/content/drive/My Drive/ZaloAI/resources/stopwords_small.txt').read().split('\n')
 stopwords = set([w.replace(' ','_') for w in stopwords])
 punct_set = set([c for c in string.punctuation]) | set(['“','”',"...","–","…","..","•",'“','”'])
 
