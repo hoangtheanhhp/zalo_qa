@@ -27,7 +27,6 @@ Due to the limitation of current dataset, the system only supports questions abo
 # Architecture Overview
  - Question Answering based IR - Speech and language processing (daniel jurafsky)
  - https://web.stanford.edu/~jurafsky/slp3/24.pdf
- - For better understanding: Open notebook file --> change the question --> run line by line
  
 <img src="Framework.png">
 
